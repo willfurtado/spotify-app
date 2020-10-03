@@ -1,8 +1,12 @@
 import spotipy
 import json
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
+
+plt.style.use('ggplot')
 
 scope = "user-top-read"
 
@@ -51,3 +55,8 @@ genre_tbl = {"Genre": list(genre_dict.keys()), "Count": list(genre_dict.values()
 #print(json.dumps(genre_tbl, indent=2))
 genre_df = pd.DataFrame(genre_tbl).sort_values("Count", ascending=False).reset_index(drop=True)
 print(genre_df)
+vis_df = genre_df.head(10)
+plt.figure(figsize=(5,5))
+sns.barplot(x="Count", y="Genre", data=vis_df, orient='h', palette='plasma')
+plt.show()
+
