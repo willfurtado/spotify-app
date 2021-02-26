@@ -18,11 +18,15 @@ def get_spotify_uri(song):
     """
     Returns the corresponding spotify URI from a given song title
     """
-    search_results = sp.search(q=str(song + "%20"), type='track', limit=1)
     try:
-        return search_results['tracks']['items'][0]['id']
+        results = sp.search(q=song, type="track", limit=50)['tracks']['items']
+        names, ids = [results[i]['name'] for i in range(50)], [results[i]['id'] for i in range(50)]
+        zipped, zipped2 = zip(names, ids), zip(names, ids)
+        perfect_match = [track_id for (name, track_id) in zipped2 if name.lower() == song.lower()]
+        track_uri = [track_id for (name, track_id) in zipped if name.lower().startswith(song.lower() + " ")][0]
+        return track_uri if not perfect_match else perfect_match[0]
     except (AttributeError, IndexError) as err:
-        print('No results for {}'.format(song))
+        return err
     
 def getCurrentUser():
     """
