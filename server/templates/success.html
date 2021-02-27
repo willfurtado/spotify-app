@@ -1,4 +1,5 @@
 <html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
 <style>
 .container {
@@ -14,14 +15,26 @@
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  color: Black;
+  color: rgb(34,37,41);
   background-color: coral;
-  text-align:center;
 }
 </style>
 
 <head>
 	<title>Spotify App</title>
+		<div class="collapse" id="navbarToggleExternalContent">
+		  <div class="bg-dark p-4">
+		    <h5 class="text-white h4">A Spotify Web API Application</h5>
+		    <span class="text-muted">I'd consider this a fair, albeit limited, representation of my passions.</span>
+		  </div>
+		</div>
+		<nav class="navbar navbar-dark bg-dark">
+		  <div class="container-fluid">
+		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		  </div>
+		</nav>
 	<style>
 		body {
 		  background-color: coral;
@@ -30,9 +43,12 @@
 	<div class="center">
 		</head>
 		<body>
-			<h1 style="font-family: 'Arial'">Sing Me A Bedtime Story: A Spotify App</h1>
-			<h3 style="font-family: 'Arial'"><p><b>By William Furtado</b></p>
-			<p style="font-family: 'Arial'">Successfully Created Playlist! Check your Spotify...</p>
+			<h1 class="display-4" style="text-align:center"><i>Sing Me A Story</i></h1>
+			<div class="alert alert-light alert-dismissible fade show" role="alert" style="color: Black">
+			  <strong style="color: rgb(34,37,41)">Playlist Created!</strong> Check out your newest playlist on Spotify. Happy listening!
+			  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 		</body>
 	</div>
 </html>

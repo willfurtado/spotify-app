@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
 	return render_template("index.html")
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST','GET'])
 def home_post():
     text = request.form['text']
     playlistGenerator(text)
@@ -15,4 +15,4 @@ def home_post():
 
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
