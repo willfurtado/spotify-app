@@ -46,13 +46,12 @@ def getNewPlaylistURI():
     except:
         print("Could not get URI of latest Spotify playlist.")
 
-def promptUserInput():
+def parseUserInput(sentence):
     """
     Prompts for user input and will create a dictionary with corresponding song URI codes
     """
     tracks = {}
-    sentence_string = input("Write a sentence: ")
-    words = sentence_string.lower().split()
+    words = sentence.lower().split()
     for word in words:
         track_id = get_spotify_uri(word)
         if word not in tracks:
@@ -68,11 +67,11 @@ def uploadPlaylistCover(playlist_id):
     sp.playlist_upload_cover_image(playlist_id, im)
 
 
-def playlistGenerator():
+def playlistGenerator(sentence):
     """
     Creates a generated playlist
     """
-    tracks = promptUserInput()
+    tracks = parseUserInput(sentence)
     sp.user_playlist_create(getCurrentUser(), 
             "Sing me a bedtime story...", 
             public=True, 
@@ -86,5 +85,3 @@ def playlistGenerator():
                                 tracks_list)
 
     return "Playlist created successfully!"
-
-playlistGenerator()
