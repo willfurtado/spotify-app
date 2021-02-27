@@ -10,8 +10,9 @@ def home():
 @app.route('/', methods=['POST','GET'])
 def home_post():
     text = request.form['text']
-    playlistGenerator(text)
-    return render_template("success.html")
+    url = playlistGenerator(text)
+    print(url)
+    return render_template("success.html", url=url)
 
 
 if __name__ == "__main__":

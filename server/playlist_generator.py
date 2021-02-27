@@ -84,4 +84,4 @@ def playlistGenerator(sentence):
                                 playlist_id, 
                                 tracks_list)
 
-    return "Playlist created successfully!"
+    return sp.playlist(playlist_id)['external_urls']['spotify']
