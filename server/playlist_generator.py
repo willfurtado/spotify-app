@@ -1,12 +1,16 @@
 import spotipy
 import json
 import base64
+import spacy
 from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
+from spacy.lang.en import English
 
 REDIRECT_URI = "https://google.com/"
 scope = "playlist-modify-public ugc-image-upload"
 IMG_PATH = "cover_photos/green.jpg"
+nlp = spacy.load("en_core_web_sm")
+nlp = English()
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, 
     client_id=CLIENT_ID, 
@@ -51,11 +55,11 @@ def parseUserInput(sentence):
     Prompts for user input and will create a dictionary with corresponding song URI codes
     """
     tracks = {}
-    words = sentence.lower().split()
-    for word in words:
-        track_id = get_spotify_uri(word)
-        if word not in tracks:
-            tracks[word] = track_id
+    tokens = nlp(sentence)
+    for token in tokens:
+        track_id = get_spotify_uri(token.text)
+        if token.text not in tracks:
+            tracks[token.text] = track_id
     return tracks
 
 def uploadPlaylistCover(playlist_id):
