@@ -10,6 +10,7 @@ REDIRECT_URI = "https://google.com/"
 scope = "playlist-modify-public ugc-image-upload"
 IMG_PATH = "cover_photos/green.jpg"
 nlp = spacy.load("en_core_web_sm")
+nlp = English()
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, 
     client_id=CLIENT_ID, 
