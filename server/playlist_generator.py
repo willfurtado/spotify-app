@@ -21,6 +21,12 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
 def get_spotify_uri(song):
     """
     Returns the corresponding spotify URI from a given song title
+
+    Parameters:
+            song (str): The string representation of a given song to search
+
+    Returns:
+            (str): A string of the given Spotify track URI for the search song
     """
     try:
         results = sp.search(q=song, type="track", limit=50)['tracks']['items']
