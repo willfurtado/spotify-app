@@ -1,5 +1,5 @@
 from flask import Flask, redirect, request, render_template
-from playlist_generator import playlistGenerator
+from playlist_generator import generate_playlist
 from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -18,8 +18,7 @@ def home():
 @app.route('/', methods=['POST','GET'])
 def home_post():
     text = request.form['text']
-    url = playlistGenerator(text)
-    print(url)
+    url = generate_playlist(text)
     return render_template("success.html", url=url)
 
 if __name__ == "__main__":

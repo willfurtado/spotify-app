@@ -2,9 +2,12 @@ import spotipy
 import json
 import base64
 import spacy
+import logging
 from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
 from spacy.lang.en import English
+
+logger = logging.getLogger(__name__)
 
 REDIRECT_URI = "https://google.com/"
 scope = "playlist-modify-public ugc-image-upload"
@@ -18,7 +21,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
     cache_path='../.cache-willfurtado',
     redirect_uri=REDIRECT_URI))
 
-def get_spotify_uri(song):
+def spotify_uri(song):
     """
     Returns the corresponding spotify URI from a given song title
 
@@ -38,37 +41,43 @@ def get_spotify_uri(song):
     except (AttributeError, IndexError) as err:
         return err
     
-def getCurrentUser():
+def current_user():
     """
-    Returns the username of the current user.
+    Returns the username of the current user
+
+    Returns:
+            (str): The display name of the current Spotify user
     """
     try:
         return sp.current_user()['display_name']
     except:
-        print("Could not get Current User information.")
+        logger.info("Could not get Current User information.")
 
-def getNewPlaylistURI():
+def new_playlist_uri():
     """
     Returns the spotify URI of the current user's most recent playlist
+
+    Returns:
+            (str): The Spotify URI of the current user's most recently created playlist
     """
     try:
         return sp.current_user_playlists()['items'][0]['uri']
     except:
-        print("Could not get URI of latest Spotify playlist.")
+        logger.info("Could not get URI of latest Spotify playlist.")
 
-def parseUserInput(sentence):
+def parse_user_input(sentence):
     """
     Prompts for user input and will create a dictionary with corresponding song URI codes
     """
     tracks = {}
     tokens = nlp(sentence)
     for token in tokens:
-        track_id = get_spotify_uri(token.text)
+        track_id = spotify_uri(token.text)
         if token.text not in tracks:
             tracks[token.text] = track_id
     return tracks
 
-def uploadPlaylistCover(playlist_id):
+def upload_playlist_cover(playlist_id):
     """
     Uploads the Base 64 encoded image to the playlist
     """
@@ -77,21 +86,23 @@ def uploadPlaylistCover(playlist_id):
     sp.playlist_upload_cover_image(playlist_id, im)
 
 
-def playlistGenerator(sentence):
+def generate_playlist(sentence):
     """
     Creates a generated playlist
     """
-    tracks = parseUserInput(sentence)
-    sp.user_playlist_create(getCurrentUser(), 
+    tracks = parse_user_input(sentence)
+    sp.user_playlist_create(current_user(), 
             "Sing me a bedtime story...", 
             public=True, 
             description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado")
     
-    playlist_id = getNewPlaylistURI()
-    uploadPlaylistCover(playlist_id)
+    playlist_id = new_playlist_uri()
+    upload_playlist_cover(playlist_id)
     tracks_list = list(tracks.values())
-    sp.user_playlist_add_tracks(getCurrentUser(), 
-                                playlist_id, 
-                                tracks_list)
+    sp.user_playlist_add_tracks(
+        current_user(), 
+        playlist_id, 
+        tracks_list,
+    )
 
     return sp.playlist(playlist_id)['external_urls']['spotify']
