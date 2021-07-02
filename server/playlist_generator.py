@@ -1,5 +1,4 @@
 import spotipy
-import json
 import base64
 import spacy
 import logging
@@ -9,17 +8,21 @@ from spacy.lang.en import English
 
 logger = logging.getLogger(__name__)
 
-REDIRECT_URI = "https://google.com/"
 scope = "playlist-modify-public ugc-image-upload"
 IMG_PATH = "cover_photos/green.jpg"
 nlp = spacy.load("en_core_web_sm")
 nlp = English()
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, 
-    client_id=CLIENT_ID, 
-    client_secret=CLIENT_SECRET,
-    cache_path='../.cache-willfurtado',
-    redirect_uri=REDIRECT_URI))
+sp = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(
+        scope=scope,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        cache_path="../.cache-willfurtado",
+        redirect_uri=REDIRECT_URI,
+    )
+)
+
 
 def spotify_uri(song):
     """
@@ -32,15 +35,24 @@ def spotify_uri(song):
             (str): A string of the given Spotify track URI for the search song
     """
     try:
-        results = sp.search(q=song, type="track", limit=50)['tracks']['items']
-        names, ids = [results[i]['name'] for i in range(50)], [results[i]['id'] for i in range(50)]
+        results = sp.search(q=song, type="track", limit=50)["tracks"]["items"]
+        names, ids = [results[i]["name"] for i in range(50)], [
+            results[i]["id"] for i in range(50)
+        ]
         zipped, zipped2 = zip(names, ids), zip(names, ids)
-        perfect_match = [track_id for (name, track_id) in zipped2 if name.lower() == song.lower()]
-        track_uri = [track_id for (name, track_id) in zipped if name.lower().startswith(song.lower() + " ")][0]
+        perfect_match = [
+            track_id for (name, track_id) in zipped2 if name.lower() == song.lower()
+        ]
+        track_uri = [
+            track_id
+            for (name, track_id) in zipped
+            if name.lower().startswith(song.lower() + " ")
+        ][0]
         return track_uri if not perfect_match else perfect_match[0]
     except (AttributeError, IndexError) as err:
         return err
-    
+
+
 def current_user():
     """
     Returns the username of the current user
@@ -49,9 +61,10 @@ def current_user():
             (str): The display name of the current Spotify user
     """
     try:
-        return sp.current_user()['display_name']
-    except:
+        return sp.current_user()["display_name"]
+    except Exception:
         logger.info("Could not get Current User information.")
+
 
 def new_playlist_uri():
     """
@@ -61,9 +74,10 @@ def new_playlist_uri():
             (str): The Spotify URI of the current user's most recently created playlist
     """
     try:
-        return sp.current_user_playlists()['items'][0]['uri']
-    except:
+        return sp.current_user_playlists()["items"][0]["uri"]
+    except Exception:
         logger.info("Could not get URI of latest Spotify playlist.")
+
 
 def parse_user_input(sentence):
     """
@@ -76,6 +90,7 @@ def parse_user_input(sentence):
         if token.text not in tracks:
             tracks[token.text] = track_id
     return tracks
+
 
 def upload_playlist_cover(playlist_id):
     """
@@ -91,18 +106,20 @@ def generate_playlist(sentence):
     Creates a generated playlist
     """
     tracks = parse_user_input(sentence)
-    sp.user_playlist_create(current_user(), 
-            "Sing me a bedtime story...", 
-            public=True, 
-            description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado")
-    
+    sp.user_playlist_create(
+        current_user(),
+        "Sing me a bedtime story...",
+        public=True,
+        description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado",
+    )
+
     playlist_id = new_playlist_uri()
     upload_playlist_cover(playlist_id)
     tracks_list = list(tracks.values())
     sp.user_playlist_add_tracks(
-        current_user(), 
-        playlist_id, 
+        current_user(),
+        playlist_id,
         tracks_list,
     )
 
-    return sp.playlist(playlist_id)['external_urls']['spotify']
+    return sp.playlist(playlist_id)["external_urls"]["spotify"]
