@@ -32,7 +32,7 @@ for i in range(num_top):
             song["name"],
             "-- {} minutes listened".format(round(song["duration_ms"] / 3600), 2),
         )
-    except IndexError as err:
+    except IndexError:
         print("Less than {} topsongs; occured at number {}".format(num_top, i))
         break
 
@@ -47,6 +47,6 @@ for i in range(num_top):
             artist["name"],
             "-- Genre: {}".format((artist["genres"])),
         )
-    except IndexError as err:
+    except IndexError:
         print("Less than {} top artists; occured at number {}".format(num_top, i))
         break

@@ -5,11 +5,15 @@ from spotipy.oauth2 import SpotifyOAuth
 
 scope = "user-top-read"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, 
-	client_id=CLIENT_ID, 
-	client_secret=CLIENT_SECRET,
-	cache_path='../.cache-willfurtado',
-	redirect_uri=REDIRECT_URI))
+sp = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(
+        scope=scope,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        cache_path="../.cache-willfurtado",
+        redirect_uri=REDIRECT_URI,
+    )
+)
 
 scooby_features = sp.audio_features(tracks=["spotify:track:4SVNBpvhXu8agkCRqWl09o"])[0]
 print("\n			Audio Analysis of Scooby:\n")

@@ -8,43 +8,59 @@ REDIRECT_URI = "https://google.com/"
 scope = "playlist-modify-public ugc-image-upload"
 IMG_PATH = "cover_photos/green.jpg"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, 
-    client_id=CLIENT_ID, 
-    client_secret=CLIENT_SECRET,
-    cache_path='../.cache-willfurtado',
-    redirect_uri=REDIRECT_URI))
+sp = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(
+        scope=scope,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        cache_path="../.cache-willfurtado",
+        redirect_uri=REDIRECT_URI,
+    )
+)
+
 
 def get_spotify_uri(song):
     """
     Returns the corresponding spotify URI from a given song title
     """
     try:
-        results = sp.search(q=song, type="track", limit=50)['tracks']['items']
-        names, ids = [results[i]['name'] for i in range(50)], [results[i]['id'] for i in range(50)]
+        results = sp.search(q=song, type="track", limit=50)["tracks"]["items"]
+        names, ids = [results[i]["name"] for i in range(50)], [
+            results[i]["id"] for i in range(50)
+        ]
         zipped, zipped2 = zip(names, ids), zip(names, ids)
-        perfect_match = [track_id for (name, track_id) in zipped2 if name.lower() == song.lower()]
-        track_uri = [track_id for (name, track_id) in zipped if name.lower().startswith(song.lower() + " ")][0]
+        perfect_match = [
+            track_id for (name, track_id) in zipped2 if name.lower() == song.lower()
+        ]
+        track_uri = [
+            track_id
+            for (name, track_id) in zipped
+            if name.lower().startswith(song.lower() + " ")
+        ][0]
         return track_uri if not perfect_match else perfect_match[0]
     except (AttributeError, IndexError) as err:
         return err
-    
+
+
 def getCurrentUser():
     """
     Returns the username of the current user.
     """
     try:
-        return sp.current_user()['display_name']
-    except:
+        return sp.current_user()["display_name"]
+    except Exception:
         print("Could not get Current User information.")
+
 
 def getNewPlaylistURI():
     """
     Returns the spotify URI of the current user's most recent playlist
     """
     try:
-        return sp.current_user_playlists()['items'][0]['uri']
-    except:
+        return sp.current_user_playlists()["items"][0]["uri"]
+    except Exception:
         print("Could not get URI of latest Spotify playlist.")
+
 
 def parseUserInput(sentence):
     """
@@ -57,6 +73,7 @@ def parseUserInput(sentence):
         if word not in tracks:
             tracks[word] = track_id
     return tracks
+
 
 def uploadPlaylistCover(playlist_id):
     """
@@ -72,16 +89,16 @@ def playlistGenerator(sentence):
     Creates a generated playlist
     """
     tracks = parseUserInput(sentence)
-    sp.user_playlist_create(getCurrentUser(), 
-            "Sing me a bedtime story...", 
-            public=True, 
-            description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado")
-    
+    sp.user_playlist_create(
+        getCurrentUser(),
+        "Sing me a bedtime story...",
+        public=True,
+        description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado",
+    )
+
     playlist_id = getNewPlaylistURI()
     uploadPlaylistCover(playlist_id)
     tracks_list = list(tracks.values())
-    sp.user_playlist_add_tracks(getCurrentUser(), 
-                                playlist_id, 
-                                tracks_list)
+    sp.user_playlist_add_tracks(getCurrentUser(), playlist_id, tracks_list)
 
     return "Playlist created successfully!"
