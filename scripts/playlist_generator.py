@@ -1,14 +1,28 @@
-import spotipy
-import json
 import base64
+import logging
+import os
+
+import spotipy
 from credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
+from spacy.lang.en import English
 from spotipy.oauth2 import SpotifyOAuth
 
 if __name__ == "__main__":
 
+    logger = logging.getLogger(__name__)
+
+    IMG_PATH = os.path.join(os.path.dirname(__file__), "cover_photos/green.jpg")
+
     scope = "playlist-modify-public ugc-image-upload"
-    IMG_PATH = os.path.join(
-        os.path.dirname(__file__), "../server/cover_photos/green.jpg"
+    nlp = English()
+
+    sp = spotipy.Spotify(
+        auth_manager=SpotifyOAuth(
+            scope=scope,
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            redirect_uri=REDIRECT_URI,
+        )
     )
 
     def spotify_uri(song):

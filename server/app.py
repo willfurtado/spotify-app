@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from playlist_generator import generate_playlist
 
 scope = "playlist-modify-public ugc-image-upload"

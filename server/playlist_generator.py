@@ -1,10 +1,11 @@
-import spotipy
 import base64
 import logging
 import os
+
+import spotipy
 from credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
-from spotipy.oauth2 import SpotifyOAuth
 from spacy.lang.en import English
+from spotipy.oauth2 import SpotifyOAuth
 
 logger = logging.getLogger(__name__)
 
