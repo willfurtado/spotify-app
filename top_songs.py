@@ -1,5 +1,4 @@
 import spotipy
-import json
 from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
 

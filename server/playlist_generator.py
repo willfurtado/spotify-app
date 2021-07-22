@@ -1,16 +1,16 @@
 import spotipy
 import base64
-import spacy
 import logging
-from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
+import os
+from credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from spotipy.oauth2 import SpotifyOAuth
 from spacy.lang.en import English
 
 logger = logging.getLogger(__name__)
 
+IMG_PATH = os.path.join(os.path.dirname(__file__), "cover_photos/green.jpg")
+
 scope = "playlist-modify-public ugc-image-upload"
-IMG_PATH = "cover_photos/green.jpg"
-nlp = spacy.load("en_core_web_sm")
 nlp = English()
 
 sp = spotipy.Spotify(
@@ -18,7 +18,6 @@ sp = spotipy.Spotify(
         scope=scope,
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
-        cache_path="../.cache-willfurtado",
         redirect_uri=REDIRECT_URI,
     )
 )
@@ -108,9 +107,9 @@ def generate_playlist(sentence):
     tracks = parse_user_input(sentence)
     sp.user_playlist_create(
         current_user(),
-        "Sing me a bedtime story...",
+        "Sing Me A Story",
         public=True,
-        description="This playlist was automatically generated based on user input using the Spotify Web API. See the code on GitHub! @willfurtado",
+        description="This playlist was automatically generated using the Spotify Web API. See the code on GitHub: @willfurtado",
     )
 
     playlist_id = new_playlist_uri()

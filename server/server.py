@@ -1,7 +1,5 @@
-from flask import Flask, redirect, request, render_template
+from flask import Flask, request, render_template
 from playlist_generator import generate_playlist
-from secrets import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
-from spotipy.oauth2 import SpotifyOAuth
 
 scope = "playlist-modify-public ugc-image-upload"
 
