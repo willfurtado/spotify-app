@@ -4,10 +4,12 @@
 __pycache__/secrets.cpython-37.pyc
 __pycache__/secrets.cpython-38.pyc
 .DS_Store
-secrets.py
+credentials.py
 server/__pycache__/secrets.cpython-37.pyc
 server/__pycache__/secrets.cpython-38.pyc
 server/demo/*
 server/__pycache__/secrets.cpython-39.pyc
 server/__pycache__/playlist_generator.cpython-39.pyc
 server/__pycache__/credentials.cpython-39.pyc
+*.pyo
+*.pyc
